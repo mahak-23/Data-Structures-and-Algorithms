@@ -9,12 +9,25 @@ Time Complexity: O(log n)
 Space Complexity: O(1) iterative, O(log n) recursive
 Prerequisite: Array must be SORTED
 
-Important variants for interviews:
-- Standard binary search
-- First/last occurrence in duplicates
-- Search in rotated sorted array
-- Find insertion point
-- Peak element finding
+Important variants for interviews (all defined in this file):
+- Standard binary search (binary_search, binary_search_recursive)
+- First occurrence in duplicates (find_first_occurrence)
+- Last occurrence in duplicates (find_last_occurrence)
+- Count occurrences (count_occurrences)
+- Search in rotated sorted array (search_rotated_array)
+- Find minimum in rotated sorted array (find_minimum_rotated)
+- Find insertion point (find_insertion_point, lower_bound)
+- Peak element finding (find_peak_element)
+- Find max in bitonic array (find_max_in_bitonic_array)
+- Search in bitonic array (search_in_bitonic_array)
+- Square root via binary search (square_root_integer)
+- Binary search in 2D matrix (search_in_2d_matrix)
+- kth smallest in multiplication table (kth_smallest_in_multiplication_table)
+- Smallest divisor (smallest_divisor)
+- Minimum days to bloom (min_days_bloom)
+- Min eating speed (min_eating_speed)
+- Allocate minimum pages (allocate_minimum_pages)
+- Find element in infinite (unknown size) sorted array (find_element_in_infinite_sorted_array)
 """
 
 def binary_search(arr, target):
@@ -663,6 +676,18 @@ def kth_smallest_in_multiplication_table(m, n, k):
     Find the kth smallest number in an m x n multiplication table.
     LeetCode #668.
 
+    Example:
+        m = 3
+        n = 3
+        k = 5
+        # The multiplication table:
+        # 1 2 3
+        # 2 4 6
+        # 3 6 9
+        # Sorted order: 1, 2, 2, 3, 3, 4, 6, 6, 9
+        # The 5th smallest number is 3
+        print(kth_smallest_in_multiplication_table(3, 3, 5)) # Output: 3
+
     Time Complexity: O(m * log(m * n))
     Space Complexity: O(1)
     """
@@ -766,6 +791,131 @@ def min_eating_speed(piles, h):
         else:
             left = mid + 1
     return ans
+
+def allocate_minimum_pages(pages, m):
+    # https://www.geeksforgeeks.org/dsa/allocate-minimum-number-pages/
+    """
+    Allocates books with given pages to m students such that maximum pages assigned to a student is minimized.
+    Each student gets consecutive books.
+
+    Args:
+        pages (List[int]): Array of integers representing number of pages in books (sorted/unsorted).
+        m (int): Number of students.
+
+    Returns:
+        int: Minimum possible value of the maximum number of pages assigned to a student. 
+             Returns -1 if allocation isn't possible.
+
+    Approaches:
+        1. Brute-force (Exponential)
+        2. DP (O(n^2*m)) -- not used here due to complexity for large n
+        3. Binary Search on Answer (Optimal, O(n log(sum(pages))))
+
+        Example:
+            pages = [12, 34, 67, 90], m = 2
+            Allocation: [12, 34, 67] and [90]  => max pages = 113
+                        [12, 34], [67, 90]    => max pages = 157
+                        [12], [34, 67, 90]    => max pages = 191
+            #
+            # The goal: Given a list of books with page counts (`pages`), and `m` students,
+            # allocate books such that:
+            #   - Each student gets at least one book.
+            #   - Books allocated to a student are consecutive in the list.
+            #   - We minimize the *maximum* number of pages assigned to any single student.
+            #
+            # This is a classic "Binary Search on Answer" problem:
+            # 1. The "answer" is the minimum possible value for the highest number of pages assigned
+            #    to a student in any allocation.
+            # 2. For any guess (call it `max_pages`), we check if it's *possible* to allocate the books
+            #    so that no student has more than `max_pages` pages.
+            #    - If possible: maybe we can do even better with a smaller `max_pages`! Try a lower guess.
+            #    - If not possible: `max_pages` is too low; try a higher guess.
+            # 3. We use binary search between `max(pages)` (worst single book) and `sum(pages)` (all books to one student),
+            #    narrowing down until we find the minimal achievable maximum.
+            #
+            # The core subroutine (`is_possible`) walks through the books, greedily assigning books
+            # to the current student until adding another book would exceed `max_pages`, at which point
+            # we assign books to the next student, and so on. If we need more than `m` students, it's not possible.
+            #
+            # Example:
+            #   pages = [12, 34, 67, 90], m = 2
+            #   Try max_pages = 113: Split as [12, 34, 67] (total 113) and [90] — possible.
+            #   Try max_pages = 112: Impossible, as [34, 67] = 101, [90] alone is 90, but then [12] is left for a third student.
+            #
+            # The minimal maximum is thus 113.
+            #
+
+            The minimum among the maximums is 113.
+    """
+
+    n = len(pages)
+    if m > n:  # Not enough books for each student
+        return -1
+
+    # ----------- Approach 1: Brute-force (Recursive Partitioning, Exponential) -----------
+    # Not practical for n > 15. Kept for clarity only.
+    # Time: O(C(n-1, m-1)) (all ways to partition n books into m parts)
+    def bf_partition(idx, students_left):
+        if students_left == 1:
+            return sum(pages[idx:])
+        min_max = float('inf')
+        curr_sum = 0
+        for i in range(idx, n - students_left + 1):
+            curr_sum += pages[i]
+            res = max(curr_sum, bf_partition(i+1, students_left - 1))
+            min_max = min(min_max, res)
+        return min_max
+
+    # Uncomment to use (for educational or tiny n):
+    # return bf_partition(0, m)
+
+    # ----------- Approach 2: DP (O(n^2*m)) -----------
+    # Not inserted here due to space. See GFG link above for details.
+
+    # ----------- Approach 3: Binary Search on Answer (Optimal) -----------
+    # Time: O(n log(S)), S=sum(pages)
+    # Space: O(1)
+    def is_possible(max_pages):
+        count = 1
+        curr_sum = 0
+        for p in pages:
+            if p > max_pages:
+                return False  # No allocation possible if a single book is too big
+            if curr_sum + p > max_pages:
+                count += 1
+                curr_sum = p
+                if count > m:
+                    return False
+            else:
+                curr_sum += p
+        return True
+
+    left, right = max(pages), sum(pages)
+    ans = -1
+    while left <= right:
+        mid = left + (right - left) // 2
+        if is_possible(mid):
+            ans = mid
+            right = mid - 1
+        else:
+            left = mid + 1
+    return ans
+
+"""
+Time and space complexities:
+
+Brute-force (recursive): 
+    Time: O(C(n-1, m-1)): exponential
+    Space: O(n) recursion stack
+
+DP:
+    Time: O(n^2 * m)
+    Space: O(n*m)
+
+Binary search on answer:
+    Time: O(n log(sum(pages)))  # each check takes O(n), search in O(log(sum-max))
+    Space: O(1)
+"""
 
 
 

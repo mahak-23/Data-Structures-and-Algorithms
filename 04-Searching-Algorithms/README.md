@@ -56,14 +56,6 @@ This folder contains implementations and analysis of fundamental searching algor
 python 01-binary-search.py
 ```
 
-The implementation includes:
-- Basic search demonstrations
-- Step-by-step visualization
-- Performance comparisons
-- Variant implementations
-- Real-world applications
-- Common pitfalls and solutions
-
 ## ⚠️ Important Notes
 
 ### Prerequisites
