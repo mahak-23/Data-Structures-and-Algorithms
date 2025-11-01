@@ -173,6 +173,45 @@ def find_insertion_point(arr, target):
     
     return left
 
+def single_non_duplicate(arr):
+    """
+    LeetCode 540: Single Element in a Sorted Array
+    Given a sorted array where every element appears exactly twice except for one element which appears only once, find that single element in O(log n) time and O(1) space.
+    Example: arr = [1,1,2,3,3,4,4,8,8] -> returns 2
+    """
+    left, right = 0, len(arr) - 1
+    while left < right:
+        mid = left + (right - left) // 2
+        # Make sure mid points to the first element of a pair (even index; pairs are [even, even+1])
+        if mid % 2 == 1:
+            mid -= 1  # If mid is odd, move back to even so we always compare start of pair
+
+        # If this pair is valid (both values equal), the single element must be further right
+        if arr[mid] == arr[mid + 1]:
+            left = mid + 2
+        else:
+            # Pair is "broken" or single is at/before mid, so shrink search to left side
+            right = mid
+            
+    # Alternative approach for understanding:
+    # Logic: Form pairs, single non-duplicate is at the "anomaly"
+    # If mid is even and arr[mid] == arr[mid+1], single is to the right
+    # If mid is odd and arr[mid] == arr[mid-1], single is to the right
+    # Else, single is at mid or to the left
+    # This pattern relies on index pairing and always halves the search
+    while left < right:
+        mid = (left + right) // 2
+
+        if ((mid % 2 == 0 and arr[mid] == arr[mid + 1]) or
+            (mid % 2 != 0 and arr[mid] == arr[mid - 1])):
+            # Proper pair formed; non-duplicate is on the right
+            left = mid + 1
+        else:
+            # "Anomaly" before or at mid; non-duplicate is left or at mid
+            right = mid
+    
+    return arr[left]
+
 # count_rotations
 def find_minimum_rotated(arr):
     """
