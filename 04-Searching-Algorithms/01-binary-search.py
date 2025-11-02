@@ -21,12 +21,10 @@ Important variants for interviews (all defined in this file):
 - Find max in bitonic array (find_max_in_bitonic_array)
 - Search in bitonic array (search_in_bitonic_array)
 - Square root via binary search (square_root_integer)
-- Binary search in 2D matrix (search_in_2d_matrix)
 - kth smallest in multiplication table (kth_smallest_in_multiplication_table)
 - Smallest divisor (smallest_divisor)
 - Minimum days to bloom (min_days_bloom)
 - Min eating speed (min_eating_speed)
-- Allocate minimum pages (allocate_minimum_pages)
 - Find element in infinite (unknown size) sorted array (find_element_in_infinite_sorted_array)
 """
 
@@ -192,7 +190,7 @@ def single_non_duplicate(arr):
         else:
             # Pair is "broken" or single is at/before mid, so shrink search to left side
             right = mid
-            
+
     # Alternative approach for understanding:
     # Logic: Form pairs, single non-duplicate is at the "anomaly"
     # If mid is even and arr[mid] == arr[mid+1], single is to the right
@@ -215,14 +213,28 @@ def single_non_duplicate(arr):
 # count_rotations
 def find_minimum_rotated(arr):
     """
-    Find minimum element in rotated sorted array
-    Example: [4,5,6,7,0,1,2] → return 4 (index of 0)
-    
-    LeetCode: Find Minimum in Rotated Sorted Array
-    Interview frequency: High
+    LeetCode 153: Find Minimum in Rotated Sorted Array.
+    Find the minimum element in a rotated sorted array (with no duplicates).
+    - No duplicates: Standard binary search variant.
+      Example:
+        arr = [4,5,6,7,0,1,2]
+        Output: 0 (minimum element at index 4)
+
+    LeetCode 154: Find Minimum in Rotated Sorted Array II.
+    - With duplicates allowed: Add the following check inside the while loop:
+        if arr[mid] == arr[right]:
+            right -= 1
+      This handles ambiguous cases when arr[mid] == arr[right] by safely shrinking the search space.
+
+      Example with duplicates:
+        arr = [2,2,2,0,1,2]
+        Output: 0 (minimum element at index 3)
+
+    The duplicate check is necessary because, in some situations, we cannot determine which half is sorted when arr[mid] == arr[right].
+    Shrinking the search space by one still guarantees progress.
     """
     left, right = 0, len(arr) - 1
-    
+
     while left < right:
         mid = left + (right - left) // 2
         
@@ -636,79 +648,6 @@ def square_root_integer(x):
             r = m - 1
     return ans
 
-def search_in_2d_matrix(matrix, target):
-    # For the case where *each row and each column* is sorted increasing (but the whole matrix is NOT flattened sorted as in the LeetCode 74 case), *only Method 2 (Staircase Search)* will guarantee correct search in O(n + m). Method 1 (flattened binary search) relies on a totally sorted matrix, which is *not* true here.
-    #
-    # Example:
-    # matrix = [
-    #     [1,  4,  7, 11, 15],
-    #     [2,  5,  8, 12, 19],
-    #     [3,  6,  9, 16, 22],
-    #     [10,13, 14, 17, 24],
-    #     [18,21, 23, 26, 30]
-    # ]
-    # print(search_in_2d_matrix(matrix, 5))   # Output: (1, 1)
-    # print(search_in_2d_matrix(matrix, 20))  # Output: (-1, -1)
-    #
-    # Only Method 2 ("Staircase" search from top-right) works for such input.
-    """
-    Search for a target value in a 2D matrix where:
-      - Integers in each row are sorted from left to right.
-      - The first integer of each row is greater than the last integer of the previous row.
-    Returns (row, col) if found, else (-1, -1).
-
-    Two approaches are provided:
-      1. Flattened Binary Search (O(log(n*m)), single binary search works as if the matrix is a 1D array)
-      2. Staircase/Stepwise Search (O(n+m), moving from top right towards bottom left)
-
-    Example:
-        matrix = [
-            [1, 3, 5, 7],
-            [10, 11, 16, 20],
-            [23, 30, 34, 50]
-        ]
-        print(search_in_2d_matrix(matrix, 3))    # Output: (0, 1)
-        print(search_in_2d_matrix(matrix, 13))   # Output: (-1, -1)
-
-    Time Complexity (Method 1): O(log(n*m))
-    Time Complexity (Method 2): O(n + m)
-    Space Complexity: O(1)
-    """
-
-    if not matrix or not matrix[0]:
-        return -1, -1
-
-    n, m = len(matrix), len(matrix[0])
-
-    # --- Approach 1: Flattened Binary Search ---
-    l, r = 0, n * m - 1
-    while l <= r:
-        mid = l + (r - l) // 2
-        # divmod(mid, m) returns a tuple (i, j) such that:
-        #   i = mid // m (row index), j = mid % m (col index).
-        # This maps the 1D index "mid" back to 2D (row, col) coordinates in the matrix.
-        i, j = divmod(mid, m)
-        if matrix[i][j] == target:
-            return i, j
-        elif matrix[i][j] < target:
-            l = mid + 1
-        else:
-            r = mid - 1
-
-    # --- Approach 2: Staircase Search --- 
-    # (uncomment to use this approach or for illustration)
-    # row, col = 0, m - 1
-    # while row < n and col >= 0:
-    #     val = matrix[row][col]
-    #     if val == target:
-    #         return row, col
-    #     elif val < target:
-    #         row += 1
-    #     else:
-    #         col -= 1
-
-    return -1, -1
-
 def kth_smallest_in_multiplication_table(m, n, k):
     """
     Binary Search on Answer Concept.
@@ -830,133 +769,6 @@ def min_eating_speed(piles, h):
         else:
             left = mid + 1
     return ans
-
-def allocate_minimum_pages(pages, m):
-    # https://www.geeksforgeeks.org/dsa/allocate-minimum-number-pages/
-    """
-    Allocates books with given pages to m students such that maximum pages assigned to a student is minimized.
-    Each student gets consecutive books.
-
-    Args:
-        pages (List[int]): Array of integers representing number of pages in books (sorted/unsorted).
-        m (int): Number of students.
-
-    Returns:
-        int: Minimum possible value of the maximum number of pages assigned to a student. 
-             Returns -1 if allocation isn't possible.
-
-    Approaches:
-        1. Brute-force (Exponential)
-        2. DP (O(n^2*m)) -- not used here due to complexity for large n
-        3. Binary Search on Answer (Optimal, O(n log(sum(pages))))
-
-        Example:
-            pages = [12, 34, 67, 90], m = 2
-            Allocation: [12, 34, 67] and [90]  => max pages = 113
-                        [12, 34], [67, 90]    => max pages = 157
-                        [12], [34, 67, 90]    => max pages = 191
-            #
-            # The goal: Given a list of books with page counts (`pages`), and `m` students,
-            # allocate books such that:
-            #   - Each student gets at least one book.
-            #   - Books allocated to a student are consecutive in the list.
-            #   - We minimize the *maximum* number of pages assigned to any single student.
-            #
-            # This is a classic "Binary Search on Answer" problem:
-            # 1. The "answer" is the minimum possible value for the highest number of pages assigned
-            #    to a student in any allocation.
-            # 2. For any guess (call it `max_pages`), we check if it's *possible* to allocate the books
-            #    so that no student has more than `max_pages` pages.
-            #    - If possible: maybe we can do even better with a smaller `max_pages`! Try a lower guess.
-            #    - If not possible: `max_pages` is too low; try a higher guess.
-            # 3. We use binary search between `max(pages)` (worst single book) and `sum(pages)` (all books to one student),
-            #    narrowing down until we find the minimal achievable maximum.
-            #
-            # The core subroutine (`is_possible`) walks through the books, greedily assigning books
-            # to the current student until adding another book would exceed `max_pages`, at which point
-            # we assign books to the next student, and so on. If we need more than `m` students, it's not possible.
-            #
-            # Example:
-            #   pages = [12, 34, 67, 90], m = 2
-            #   Try max_pages = 113: Split as [12, 34, 67] (total 113) and [90] — possible.
-            #   Try max_pages = 112: Impossible, as [34, 67] = 101, [90] alone is 90, but then [12] is left for a third student.
-            #
-            # The minimal maximum is thus 113.
-            #
-
-            The minimum among the maximums is 113.
-    """
-
-    n = len(pages)
-    if m > n:  # Not enough books for each student
-        return -1
-
-    # ----------- Approach 1: Brute-force (Recursive Partitioning, Exponential) -----------
-    # Not practical for n > 15. Kept for clarity only.
-    # Time: O(C(n-1, m-1)) (all ways to partition n books into m parts)
-    def bf_partition(idx, students_left):
-        if students_left == 1:
-            return sum(pages[idx:])
-        min_max = float('inf')
-        curr_sum = 0
-        for i in range(idx, n - students_left + 1):
-            curr_sum += pages[i]
-            res = max(curr_sum, bf_partition(i+1, students_left - 1))
-            min_max = min(min_max, res)
-        return min_max
-
-    # Uncomment to use (for educational or tiny n):
-    # return bf_partition(0, m)
-
-    # ----------- Approach 2: DP (O(n^2*m)) -----------
-    # Not inserted here due to space. See GFG link above for details.
-
-    # ----------- Approach 3: Binary Search on Answer (Optimal) -----------
-    # Time: O(n log(S)), S=sum(pages)
-    # Space: O(1)
-    def is_possible(max_pages):
-        count = 1
-        curr_sum = 0
-        for p in pages:
-            if p > max_pages:
-                return False  # No allocation possible if a single book is too big
-            if curr_sum + p > max_pages:
-                count += 1
-                curr_sum = p
-                if count > m:
-                    return False
-            else:
-                curr_sum += p
-        return True
-
-    left, right = max(pages), sum(pages)
-    ans = -1
-    while left <= right:
-        mid = left + (right - left) // 2
-        if is_possible(mid):
-            ans = mid
-            right = mid - 1
-        else:
-            left = mid + 1
-    return ans
-
-"""
-Time and space complexities:
-
-Brute-force (recursive): 
-    Time: O(C(n-1, m-1)): exponential
-    Space: O(n) recursion stack
-
-DP:
-    Time: O(n^2 * m)
-    Space: O(n*m)
-
-Binary search on answer:
-    Time: O(n log(sum(pages)))  # each check takes O(n), search in O(log(sum-max))
-    Space: O(1)
-"""
-
-
 
 # Typical binary search interview checklist:
 # - Infinite loop? off by 1? (l < r vs l <= r)

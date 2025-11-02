@@ -55,7 +55,6 @@ This repository contains the concepts of Data Structures and Algorithms (DSA) us
 - Binary search on answer (searching for maximum/minimum feasible value)
 - Search in rotated sorted array (Leetcode favorite)
 - Find peak element (unimodal arrays)
-- Search in 2D matrix
 - Exponential search (unbounded/infinite-like arrays)
 - Interpolation search (uniformly distributed arrays)
 - Linear search comparison and when it's best
