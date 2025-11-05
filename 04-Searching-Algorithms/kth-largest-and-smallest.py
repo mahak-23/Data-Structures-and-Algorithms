@@ -72,30 +72,70 @@ class KthElementFinder:
     """
 
     def kth_smallest_heap(self, arr, k):
-        # Max-heap (invert sign for Python's min-heap)
+        """
+        Solution 1 (max-heap of size k, classical competitive):
+          - Use a max-heap of size k to keep track of the k smallest elements seen so far.
+          - At the end, the root of the max-heap is the k-th smallest.
+        Solution 2 (min-heap of all n elements):
+          - Build a min-heap of all elements, pop k times, k-th pop is the answer.
+        """
         if k > len(arr):
             return None
+
+        # Max-heap (size k): O(n log k) time, O(k) space
         maxheap = [-x for x in arr[:k]]
         heapq.heapify(maxheap)
-        for i in range(k, len(arr)):
-            if -arr[i] > maxheap[0]:
-                continue
-            if arr[i] < -maxheap[0]:
+        for num in arr[k:]:
+            if -maxheap[0] > num:
                 heapq.heappop(maxheap)
-                heapq.heappush(maxheap, -arr[i])
-        return -maxheap[0] if maxheap else None
+                heapq.heappush(maxheap, -num)
+        kth_smallest_maxheap = -maxheap[0] if maxheap else None
+
+        # Min-heap (size n): O(n + k log n) time, O(n) space
+        minheap = list(arr)
+        heapq.heapify(minheap)
+        kth_smallest_minheap = None
+        for _ in range(k):
+            kth_smallest_minheap = heapq.heappop(minheap)
+
+        # Return both results for demonstration
+        return {
+            'maxheap_version': kth_smallest_maxheap,
+            'minheap_version': kth_smallest_minheap
+        }
 
     def kth_largest_heap(self, arr, k):
-        # Min-heap for kth largest
+        """
+        Solution 1 (min-heap of size k, standard):
+          - Keep a min-heap of size k with k largest seen so far.
+          - At the end, heap root is k-th largest.
+        Solution 2 (max-heap of all n elements):
+          - Build a max-heap of all elements, pop k times, k-th pop is answer.
+        """
         if k > len(arr):
             return None
+
+        # Min-heap (size k): O(n log k) time, O(k) space
         minheap = arr[:k]
         heapq.heapify(minheap)
-        for i in range(k, len(arr)):
-            if arr[i] > minheap[0]:
+        for num in arr[k:]:
+            if minheap[0] < num:
                 heapq.heappop(minheap)
-                heapq.heappush(minheap, arr[i])
-        return minheap[0] if minheap else None
+                heapq.heappush(minheap, num)
+        kth_largest_minheap = minheap[0] if minheap else None
+
+        # Max-heap (size n): O(n + k log n) time, O(n) space
+        maxheap = [-x for x in arr]
+        heapq.heapify(maxheap)
+        kth_largest_maxheap = None
+        for _ in range(k):
+            kth_largest_maxheap = -heapq.heappop(maxheap)
+
+        # Return both results for demonstration
+        return {
+            'minheap_version': kth_largest_minheap,
+            'maxheap_version': kth_largest_maxheap
+        }
 
     # ======================================
     # 3. Optimal Solution (QuickSelect)
