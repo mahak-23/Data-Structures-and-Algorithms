@@ -64,6 +64,41 @@ def partition(arr, low, high):
     arr[i + 1], arr[high] = arr[high], arr[i + 1]
     return i + 1
 
+# OR we can use
+# def partition(the_list, start_index, end_index):
+#
+#     pivot = the_list[end_index]
+#
+#     left_index  = start_index
+#     right_index = end_index - 1
+#
+#     while left_index <= right_index:
+#
+#         # Walk until we find something on the left side that belongs
+#         # on the right (less than the pivot).
+#         while left_index <= end_index and the_list[left_index] <= pivot:
+#             left_index += 1
+#
+#         # Walk until we find something on the right side that belongs
+#         # on the left (greater than or equal to the pivot).
+#         while right_index >= start_index and the_list[right_index] > pivot:
+#             right_index -= 1
+#
+#         # Swap the items at left_index and right_index, moving the element
+#         # that's smaller than the pivot to the left half and the element
+#         # that's larger than the pivot to the right half.
+#         if left_index < right_index:
+#             the_list[right_index], the_list[left_index] = the_list[left_index], the_list[right_index]
+#
+#         # Unless we've looked at all the elements in the list and are
+#         # done partitioning. In that case, move the pivot element into
+#         # its final position.
+#         else:
+#             the_list[end_index], the_list[left_index] = the_list[left_index], the_list[end_index]
+#
+#     return left_index
+
+
 def quick_sort_random_pivot(arr, low=0, high=None):
     """
     Quick sort with random pivot selection (avoids worst case)

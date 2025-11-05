@@ -79,6 +79,18 @@ def count_sort(arr):
         count[num] -= 1
     return output
 
+# OR without prefix sum
+ 
+'''
+nums = []
+for i in range (0, max_val + 1):
+    while count[i]>0: 
+        nums.append(i)
+        count [i]-=1
+return nums
+
+'''
+
 def count_sort_with_negatives(arr):
     """
     Counting Sort (Handles Negative Values)
