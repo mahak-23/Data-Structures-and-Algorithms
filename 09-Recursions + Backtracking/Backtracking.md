@@ -172,15 +172,16 @@ def rat_maze(maze, x, y, path, res):
     if x == n-1 and y == n-1:
         res.append("".join(path))
         return
+    
+    maze[x][y] = 0
     directions = [(-1,0,'U'),(1,0,'D'),(0,-1,'L'),(0,1,'R')]
     for dx, dy, move in directions:
         nx, ny = x+dx, y+dy
         if 0<=nx<n and 0<=ny<n and maze[nx][ny]==1:
-            maze[nx][ny] = 0
             path.append(move)
             rat_maze(maze, nx, ny, path, res)
             path.pop()
-            maze[nx][ny] = 1
+    maze[x][y] = 1
 ```
 **Example:**
 ```python
