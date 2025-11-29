@@ -29,6 +29,17 @@ Constraints:
 #   Division test for every number and every factor.
 # Time Complexity: O(n * logA), where A is the value of the nth ugly number (too slow)
 # Space Complexity: O(1)
+
+# Dry Run Example:
+# n = 6
+# count = 0, num = 0
+# num = 1: is_ugly(1) → True   [count=1]
+# num = 2: is_ugly(2) → True   [count=2]
+# num = 3: is_ugly(3) → True   [count=3]
+# num = 4: is_ugly(4) → True   [count=4]
+# num = 5: is_ugly(5) → True   [count=5]
+# num = 6: is_ugly(6): 6/2=3 → 3/3=1 → True  [count=6]   --> n==6, return 6
+
 def is_ugly(num):
     if num == 0: return False
     for p in [2, 3, 5]:
@@ -54,6 +65,17 @@ def nthUglyNumber_bruteforce(n):
 #   This is similar to Dijkstra sequence generation or K-way merge.
 # Time Complexity: O(n log n)
 # Space Complexity: O(n)
+
+# Dry Run Example:
+# For n = 6:
+# heap = [1], seen={1}
+# pop 1 (curr=1): push 2,3,5 → heap=[2,3,5], seen={1,2,3,5}
+# pop 2 → push 4,6,10 → heap=[3,4,5,6,10], seen add 4,6,10
+# pop 3 → push 6(already seen),9,15 → heap=[4,5,6,9,10,15], add 9,15
+# pop 4 → push 8,12,20 → heap=[5,6,8,9,10,12,15,20], seen add 8,12,20
+# pop 5 → push 10(already),15(already),25 → heap=[6,8,9,10,12,15,20,25], add 25
+# pop 6 → That's the 6th ugly, so answer = 6
+
 import heapq
 
 class SolutionHeap:
@@ -81,6 +103,20 @@ class SolutionHeap:
 #   The ugly number sequence is a merge of 2x, 3x, 5x the preceding sequence values.
 # Time Complexity: O(n)
 # Space Complexity: O(n)
+
+# Dry Run Example:
+# n=10
+# ugly=[1], i2=i3=i5=0
+# i=1: nxt2=2, nxt3=3, nxt5=5  min=2 → ugly=[1,2], i2=1
+# i=2: nxt2=4, nxt3=3, nxt5=5  min=3 → ugly=[1,2,3], i3=1
+# i=3: nxt2=4, nxt3=6, nxt5=5  min=4 → ugly=[1,2,3,4], i2=2
+# i=4: nxt2=6, nxt3=6, nxt5=5  min=5 → ugly=[1,2,3,4,5], i5=1
+# i=5: nxt2=6, nxt3=6, nxt5=10 min=6 → ugly=[1,2,3,4,5,6], i2=3, i3=2
+# i=6: nxt2=8, nxt3=9, nxt5=10 min=8 → ugly=[1,2,3,4,5,6,8], i2=4
+# i=7: nxt2=10, nxt3=9, nxt5=10 min=9 → ugly=[1,2,3,4,5,6,8,9], i3=3
+# i=8: nxt2=10, nxt3=12, nxt5=10 min=10→ugly=[1,2,3,4,5,6,8,9,10], i2=5, i5=2
+# i=9: nxt2=12, nxt3=12, nxt5=15 min=12→ugly=[1,2,3,4,5,6,8,9,10,12], i2=6, i3=4
+
 class Solution:
     def nthUglyNumber(self, n: int) -> int:
         ugly = [0]*n
