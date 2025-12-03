@@ -67,7 +67,82 @@ class Solution:
         return maxArea
 
 # -----------------------------------------------------------
-# Approach 2: Stack (Optimal: O(n)), increasing stack
+# Approach 2: Use Less From Left/Right (O(n)), explicit calculation of next smaller/prev smaller for each bar
+# -----------------------------------------------------------
+"""
+Intuition:
+----------
+For each bar heights[i], calculate:
+    - left[i]: index of the first bar to the left that is less than heights[i]
+    - right[i]: index of the first bar to the right that is less than heights[i]
+
+The formula (right[i] - left[i] - 1) gives the width of the largest rectangle 
+where heights[i] is the smallest bar in that rectangle:
+- right[i] is the first index to the right where height is less than heights[i] (exclusive boundary)
+- left[i] is the first index to the left where height is less than heights[i] (exclusive boundary)
+- All bars between (left[i]+1) and (right[i]-1) are at least as tall as heights[i]
+So, the width is (right[i] - left[i] - 1), and the maximal area with heights[i] as the shortest bar is:
+   heights[i] * (right[i] - left[i] - 1)
+
+This can be done with two passes and monotonic stacks.
+
+Dry Run:
+--------
+Input: [2,1,5,6,2,3]
+indx    0 1 2 3 4 5
+left[i] (index of Previous Less Element):
+i=0: no bar to left less -> -1
+i=1: no bar to left less -> -1
+i=2: left[2]=1
+i=3: left[3]=2
+i=4: left[4]=1
+i=5: left[5]=4
+
+right[i] (index of Next Less Element):
+i=5: no bar to right less -> 6
+i=4: right[4]=5
+i=3: right[3]=4
+i=2: right[2]=4
+i=1: right[1]=6
+i=0: right[0]=1
+
+For each i, area is heights[i]*(right[i] - left[i] - 1)
+
+Time Complexity: O(n)
+Space Complexity: O(n)
+"""
+class Solution:
+    def largestRectangleAreaLessFromLR(self, heights: List[int]) -> int:
+        n = len(heights)
+        left = [-1] * n
+        right = [n] * n
+        stack = []
+
+        # Compute left (Previous less element for each bar)
+        for i in range(n):
+            while stack and heights[stack[-1]] >= heights[i]:
+                stack.pop()
+            left[i] = stack[-1] if stack else -1
+            stack.append(i)
+
+        stack.clear()
+
+        # Compute right (Next less element for each bar)
+        for i in range(n - 1, -1, -1):
+            while stack and heights[stack[-1]] >= heights[i]:
+                stack.pop()
+            right[i] = stack[-1] if stack else n
+            stack.append(i)
+
+        maxArea = 0
+        for i in range(n):
+            area = heights[i] * (right[i] - left[i] - 1)
+            maxArea = max(maxArea, area)
+        return maxArea
+
+
+# -----------------------------------------------------------
+# Approach 3: Stack (Optimal: O(n)), increasing stack
 # -----------------------------------------------------------
 """
 Intuition:
@@ -108,6 +183,7 @@ class Solution:
                 w = i if not stack else i - stack[-1] - 1
                 maxArea = max(maxArea, h * w)
             stack.append(i)
+        heights.pop()  # Restore input
         return maxArea
 
 """
