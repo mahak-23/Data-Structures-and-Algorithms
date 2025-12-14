@@ -21,6 +21,15 @@
    - Iterative Postorder Traversal (1 stack)
    - All 3 Traversals (Preorder/Inorder/Postorder) in One Pass
 8. Height of a Binary Tree
+9. Common Binary Tree Operations
+   - Count Nodes
+   - Check if Balanced
+   - Diameter of Binary Tree
+   - Maximum/Minimum Depth
+   - Check if Identical
+   - Check if Symmetric
+10. Time and Space Complexity
+11. Common Interview Patterns
 
 ---
 
@@ -481,6 +490,228 @@ def height(node):
     right_height = height(node.right)
     return 1 + max(left_height, right_height)
 ```
+
+---
+
+### 9. Common Binary Tree Operations
+
+---
+
+#### 9.1 Count Nodes in Binary Tree
+
+```python
+def count_nodes(node):
+    """Count total number of nodes in binary tree."""
+    if not node:
+        return 0
+    return 1 + count_nodes(node.left) + count_nodes(node.right)
+```
+
+**Time Complexity:** O(n)  
+**Space Complexity:** O(h) where h is height
+
+---
+
+#### 9.2 Check if Binary Tree is Balanced
+
+A balanced binary tree is one where the heights of the two child subtrees of any node differ by at most one.
+
+```python
+def is_balanced(node):
+    """Check if binary tree is balanced."""
+    def check_balance(node):
+        if not node:
+            return True, -1  # is_balanced, height
+        
+        left_balanced, left_height = check_balance(node.left)
+        right_balanced, right_height = check_balance(node.right)
+        
+        height = 1 + max(left_height, right_height)
+        balanced = (left_balanced and right_balanced and 
+                   abs(left_height - right_height) <= 1)
+        
+        return balanced, height
+    
+    return check_balance(node)[0]
+```
+
+**Time Complexity:** O(n)  
+**Space Complexity:** O(h)
+
+---
+
+#### 9.3 Diameter of Binary Tree
+
+The diameter of a binary tree is the length of the longest path between any two nodes (may or may not pass through root).
+
+```python
+def diameter_of_binary_tree(root):
+    """Find diameter of binary tree."""
+    max_diameter = 0
+    
+    def height_and_diameter(node):
+        nonlocal max_diameter
+        if not node:
+            return -1  # Height of empty tree
+        
+        left_height = height_and_diameter(node.left)
+        right_height = height_and_diameter(node.right)
+        
+        # Diameter passing through current node
+        current_diameter = left_height + right_height + 2
+        max_diameter = max(max_diameter, current_diameter)
+        
+        return 1 + max(left_height, right_height)
+    
+    height_and_diameter(root)
+    return max_diameter
+```
+
+**Time Complexity:** O(n)  
+**Space Complexity:** O(h)
+
+**Example:**
+```
+    1
+   / \
+  2   3
+ / \
+4   5
+```
+Diameter = 3 (path from 4 to 3 via 2 and 1)
+
+---
+
+#### 9.4 Maximum Depth of Binary Tree
+
+```python
+def max_depth(node):
+    """Return maximum depth (height) of binary tree."""
+    if not node:
+        return 0
+    return 1 + max(max_depth(node.left), max_depth(node.right))
+```
+
+**Time Complexity:** O(n)  
+**Space Complexity:** O(h)
+
+---
+
+#### 9.5 Minimum Depth of Binary Tree
+
+```python
+def min_depth(node):
+    """Return minimum depth of binary tree."""
+    if not node:
+        return 0
+    if not node.left:
+        return 1 + min_depth(node.right)
+    if not node.right:
+        return 1 + min_depth(node.left)
+    return 1 + min(min_depth(node.left), min_depth(node.right))
+```
+
+**Time Complexity:** O(n)  
+**Space Complexity:** O(h)
+
+---
+
+#### 9.6 Check if Two Trees are Identical
+
+```python
+def is_same_tree(p, q):
+    """Check if two binary trees are identical."""
+    if not p and not q:
+        return True
+    if not p or not q:
+        return False
+    return (p.val == q.val and 
+            is_same_tree(p.left, q.left) and 
+            is_same_tree(p.right, q.right))
+```
+
+**Time Complexity:** O(n)  
+**Space Complexity:** O(h)
+
+---
+
+#### 9.7 Check if Tree is Symmetric
+
+```python
+def is_symmetric(root):
+    """Check if binary tree is symmetric (mirror of itself)."""
+    def is_mirror(left, right):
+        if not left and not right:
+            return True
+        if not left or not right:
+            return False
+        return (left.val == right.val and 
+                is_mirror(left.left, right.right) and 
+                is_mirror(left.right, right.left))
+    
+    if not root:
+        return True
+    return is_mirror(root.left, root.right)
+```
+
+**Time Complexity:** O(n)  
+**Space Complexity:** O(h)
+
+---
+
+### 10. Time and Space Complexity
+
+---
+
+| Operation | Time Complexity | Space Complexity |
+| --------- | --------------- | ---------------- |
+| **Traversal (All types)** | O(n) | O(h) recursive, O(n) worst case |
+| **Height Calculation** | O(n) | O(h) |
+| **Count Nodes** | O(n) | O(h) |
+| **Check Balanced** | O(n) | O(h) |
+| **Diameter** | O(n) | O(h) |
+| **Search** | O(n) | O(h) |
+| **Insert (at known position)** | O(1) | O(1) |
+
+**Notes:**
+- `n` = number of nodes
+- `h` = height of tree
+- For balanced tree: h = O(log n)
+- For skewed tree: h = O(n)
+
+---
+
+### 11. Common Interview Patterns
+
+---
+
+1. **Tree Traversal Problems**
+   - Level order traversal
+   - Zigzag traversal
+   - Boundary traversal
+   - Vertical order traversal
+
+2. **Path Problems**
+   - Root to leaf paths
+   - Path sum
+   - Maximum path sum
+   - Longest path
+
+3. **Tree Construction**
+   - Build tree from preorder and inorder
+   - Build tree from postorder and inorder
+   - Serialize/Deserialize tree
+
+4. **Tree Properties**
+   - Check if balanced
+   - Check if symmetric
+   - Check if identical
+   - Check if subtree
+
+5. **Tree Transformations**
+   - Invert/Mirror tree
+   - Flatten tree to linked list
+   - Convert to sum tree
 
 ---
 
