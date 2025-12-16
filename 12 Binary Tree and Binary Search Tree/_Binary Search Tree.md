@@ -364,6 +364,27 @@ def is_bst(node, min_val=float('-inf'), max_val=float('inf')):
         return False
     return (is_bst(node.left, min_val, node.val) and
             is_bst(node.right, node.val, max_val))
+
+class Solution:
+    def isValidBST(self, root):
+        prev = None
+
+        def is_bst(node):
+            nonlocal prev
+            if not node:
+                return True
+
+            if not is_bst(node.left):
+                return False
+
+            if prev is not None and prev.val >= node.val:
+                return False
+
+            prev = node
+
+            return is_bst(node.right)
+
+        return is_bst(root)
 ```
 
 - If you only use inorder traversal, the sequence should be strictly increasing (if BST property holds).
