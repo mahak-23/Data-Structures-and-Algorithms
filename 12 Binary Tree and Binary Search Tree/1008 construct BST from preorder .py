@@ -144,6 +144,41 @@ class SolutionIterative:
                 stack.append(node)
         return root
 
+# ---------------------------------------------------------------------
+# Approach 5 - Recursive Using Single Parent Bound (Alternative concise recursion)
+# ---------------------------------------------------------------------
+"""
+Alternative concise approach using only a parent upper bound and a single idx pointer.
+Instead of passing (lo, hi), only an upper bound (parent) is maintained:
+- At each call, only recurse if preorder[idx] < parent.
+- For the left subtree, the upper bound is current value.
+- For right subtree, re-use parent's upper bound.
+
+This results in very concise code!
+This approach is also O(N) time, O(N) stack.
+"""
+
+class SolutionParentBound:
+    def bstFromPreorder(self, preorder: List[int]) -> Optional[TreeNode]:
+        idx = 0
+        n = len(preorder)
+
+        def helper(parent):
+            nonlocal idx
+            if idx == n:
+                return None
+            val = preorder[idx]
+            if val > parent:
+                return None
+            idx += 1
+            root = TreeNode(val)
+            # left children must be < val, right can be < parent but > val
+            root.left = helper(val)
+            root.right = helper(parent)
+            return root
+
+        return helper(float('inf'))
+
 """
 Summary Table
 
@@ -153,5 +188,6 @@ Summary Table
 | Boundary Index   | O(N^2)      | O(N)       |
 | Index+Bounded    | O(N)        | O(N)       |
 | Stack (Iter)     | O(N)        | O(N)       |
+| ParentBound      | O(N)        | O(N)       | 
 
 """
