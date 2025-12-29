@@ -1299,39 +1299,6 @@ Continue until sorted: [5, 6, 7, 11, 12, 13]
 
 ---
 
-## Common Interview Patterns
-
-1. **Kth Largest/Smallest Element**
-   - Use min-heap of size k (for kth largest)
-   - Use max-heap of size k (for kth smallest)
-
-2. **Merge K Sorted Lists/Arrays**
-   - Use min-heap to always get next smallest element
-
-3. **Top K Frequent Elements**
-   - Use min-heap of size k with frequency counts
-
-4. **Find Median from Data Stream**
-   - Use two heaps: max-heap (left) + min-heap (right)
-
-5. **Task Scheduling**
-   - Use priority queue based on priority/deadline
-
----
-
-## Practice Problems
-
-1. **LeetCode 215:** Kth Largest Element in an Array
-2. **LeetCode 1046:** Last Stone Weight
-3. **LeetCode 23:** Merge K Sorted Lists
-4. **LeetCode 347:** Top K Frequent Elements
-5. **LeetCode 295:** Find Median from Data Stream
-6. **LeetCode 378:** Kth Smallest Element in a Sorted Matrix
-7. **LeetCode 703:** Kth Largest Element in a Stream
-8. **LeetCode 973:** K Closest Points to Origin
-
----
-
 ## Additional Notes
 
 - **Heap Sort:** Uses heap to sort array in O(n log n) time
