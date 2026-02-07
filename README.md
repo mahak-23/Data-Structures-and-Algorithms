@@ -11,6 +11,17 @@ This repository contains the concepts of Data Structures and Algorithms (DSA) us
 ├── 04-Searching-Algorithms/            # Binary search + variants (Python)
 ├── 05-Algorithms/                      # Important algorithms (Python)
 ├── 06-Arrays/                          # Array problems (Python)
+├── 07-Strings/                         # String manipulation problems (Python)
+├── 08-Recursions + Backtracking/       # Recursion and backtracking problems (Python)
+├── 09-Sliding Window + Two Pointers/   # Sliding window and two pointer techniques (Python)
+├── 10-Stack and Queue/                 # Stack and queue data structures (Python)
+├── 11-Binary Tree and Binary Search Tree/  # Tree data structures and problems (Python)
+├── 12-Heaps/                           # Heap data structure and problems (Python)
+├── 13-Greedy/                          # Greedy algorithm problems (Python)
+├── 14-Linked List/                     # Linked list data structure and problems (Python)
+├── 15-Hashing/                         # Hash table and hashing problems (Python)
+├── 16-Bit Manipulation/                # Bit manipulation problems (Python)
+├── Problems/                           # General problem solutions (Python)
 └── README.md
 ```
 
@@ -66,6 +77,137 @@ This repository contains the concepts of Data Structures and Algorithms (DSA) us
 - **Euclidean Algorithm**: GCD computation, cryptographic applications
 - **Kadane's Algorithm**: Maximum subarray + variants (2D, circular, product)
 
+### 6. Arrays
+
+**Array manipulation and problem-solving**
+
+- Subarray problems (sum, count, maximum)
+- Two-pointer techniques
+- Sliding window variations
+- Array transformations and rotations
+- Inversion counting and related problems
+
+### 7. Strings
+
+**String processing and pattern matching**
+
+- Palindrome problems
+- Anagram detection
+- Parentheses matching
+- String transformations
+- Pattern matching algorithms
+
+### 9. Recursions + Backtracking
+
+**Recursive thinking and backtracking algorithms**
+
+- Recursion fundamentals
+- Backtracking patterns
+- Combination and permutation problems
+- N-Queens problem
+- Word break problems
+- Subset generation
+
+### 9. Sliding Window + Two Pointers
+
+**Efficient array/string processing techniques**
+
+- Fixed-size sliding window
+- Variable-size sliding window
+- Two-pointer approach
+- Container with most water
+- Longest substring problems
+- Anagrams in string
+
+### 10. Stack and Queue
+
+**Stack and queue data structures**
+
+- Stack operations and applications
+- Queue operations and variations
+- Infix, postfix, prefix conversions
+- Monotonic stack problems
+- Valid parentheses
+- Next greater/smaller element
+
+### 11. Binary Tree and Binary Search Tree
+
+**Tree data structures and algorithms**
+
+- Binary tree traversals (inorder, preorder, postorder)
+- Binary search tree operations
+- Tree construction problems
+- Tree path problems
+- Lowest common ancestor
+- Tree serialization
+- AVL trees and balancing
+
+### 12. Heaps
+
+**Heap data structure and priority queues**
+
+- Min heap and max heap
+- Heap operations
+- Kth largest/smallest elements
+- Merge k sorted lists
+- Top K frequent elements
+- Median finder
+- Task scheduler problems
+
+### 13. Greedy
+
+**Greedy algorithm problems**
+
+- Activity selection
+- Interval problems
+- Jump game variations
+- Candy distribution
+- Meeting room problems
+- Non-overlapping intervals
+
+### 14. Linked List
+
+**Linked list data structures**
+
+- Singly linked list operations
+- Doubly linked list operations
+- Linked list reversal
+- Cycle detection
+- Merge sorted lists
+- Remove duplicates
+- Intersection of linked lists
+
+### 15. Hashing
+
+**Hash tables and hashing techniques**
+
+- Hash map operations
+- Two sum problems
+- Longest consecutive sequence
+- Subarray with given sum
+- Palindrome pairs
+- Repeated DNA sequences
+
+### 16. Bit Manipulation
+
+**Bit manipulation techniques**
+
+- Bitwise operations
+- Set bit counting
+- XOR problems
+- Single number problems
+- Gray code
+- Bit flips and conversions
+
+### 8. Problems
+
+**General problem solutions**
+
+- Various algorithmic problems
+- Interview preparation problems
+- Competitive programming problems
+
+
 ## 🎯 Quick Reference
 
 ### Complexity Hierarchy
@@ -89,3 +231,20 @@ O(1) < O(log n) < O(n) < O(n log n) < O(n²) < O(2ⁿ)
 - **Interview Variants**: Important variations frequently asked
 - **Complexity Analysis**: Theoretical and practical performance insights
 - **Real Examples**: Practical applications and use cases
+- **Multiple Solutions**: Brute force, optimized, and best approaches with detailed explanations
+- **Comprehensive Documentation**: Each solution includes approach, intuition, dry run, examples, and complexity analysis
+
+## 🚀 Getting Started
+
+1. Navigate to the topic you want to learn
+2. Read the markdown files for theory and concepts
+3. Study the Python implementations
+4. Practice with the provided problems
+5. Review complexity analysis for each solution
+
+## 📝 Notes
+
+- All code is written in Python 3
+- Solutions include multiple approaches (brute force, optimized, best)
+- Each solution includes detailed comments and explanations
+- Time and space complexity are provided for all solutions

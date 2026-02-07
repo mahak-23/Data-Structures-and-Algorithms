@@ -428,9 +428,3 @@ print(subsetsWithDup([1,2,2]))
 
 ---
 
-
-
-(See [Recursion.md](./Recursion.md) for *even more* classic recursion/backtracking problems, code, and further examples!)
-
----
-
